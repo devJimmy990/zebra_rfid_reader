@@ -12,14 +12,17 @@ buildscript {
     }
 }
 
+// Add repositories at root level for all projects
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("$rootDir/maven") }
+    }
+}
+
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
-
-repositories {
-    google()
-    mavenCentral()
-    // ❌ DO NOT add plugin repo here
-}
 
 android {
     namespace = "dev.jimmy.zebra_rfid_reader"
@@ -49,5 +52,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:1.6.1"
     implementation "androidx.core:core-ktx:1.12.0"
 
+    // Reference the published maven artifact
     implementation "com.zebra.rfid:rfid-api3:2.0.5.238"
 }

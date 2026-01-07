@@ -1,242 +1,196 @@
 package dev.jimmy.zebra_rfid_reader
 
+import android.content.Context
+import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.EventChannel
-import androidx.annotation.NonNull
-import android.content.Context
 
-class ZebraRfidReaderPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
-
-    private lateinit var methodChannel: MethodChannel
-    private lateinit var eventChannel: EventChannel
-    private lateinit var rfidHandler: RFIDHandler
-    private lateinit var context: Context
+class ZebraRfidReaderPlugin : FlutterPlugin, MethodCallHandler {
 
     companion object {
-        private const val TAG = "ZebraRfidReaderPlugin"
-        private const val METHOD_CHANNEL_NAME = "zebra_rfid_reader"
-        private const val EVENT_CHANNEL_NAME = "zebra_rfid_reader/events"
+        private const val CHANNEL_NAME = "zebra_rfid_reader"
+        private const val EVENT_CHANNEL = "zebra_rfid_reader/events"
     }
+
+    private lateinit var context: Context
+    private lateinit var methodChannel: MethodChannel
+    private lateinit var eventChannel: EventChannel
+    
+    private var rfidHandler: RFIDHandler? = null
+    private var eventStreamHandler: EventStreamHandler? = null
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         context = flutterPluginBinding.applicationContext
 
-        // Setup method channel
-        methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, METHOD_CHANNEL_NAME)
+        methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL_NAME)
         methodChannel.setMethodCallHandler(this)
 
-        // Setup event channel
-        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, EVENT_CHANNEL_NAME)
-        eventChannel.setStreamHandler(this)
+        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, EVENT_CHANNEL)
+        eventStreamHandler = EventStreamHandler()
+        eventChannel.setStreamHandler(eventStreamHandler)
 
-        // Initialize RFID handler
-        rfidHandler = RFIDHandler(context)
-        rfidHandler.initialize()
+        try {
+            rfidHandler = RFIDHandler(context, eventStreamHandler!!, eventStreamHandler!!)
+        } catch (e: Exception) {
+            // Silent - handler creation failed
+        }
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-        when (call.method) {
-            "checkReaderConnection" -> {
-                val isConnected = rfidHandler.isConnected
-                result.success(if (isConnected) "Connected" else "Not connected")
-            }
-
-            "connect" -> {
-                rfidHandler.connectReader { message ->
-                    result.success(message)
+        try {
+            when (call.method) {
+                "initialize" -> {
+                    rfidHandler?.initialize(object : RFIDHandler.ResultCallback {
+                        override fun onSuccess(data: Any?) {
+                            result.success(data)
+                        }
+                        override fun onError(errorCode: String, errorMessage: String, errorDetails: Any?) {
+                            result.error(errorCode, errorMessage, errorDetails)
+                        }
+                    })
                 }
-            }
 
-            "disconnect" -> {
-                rfidHandler.disconnect()
-                result.success("Disconnected")
-            }
-
-            "isConnected" -> {
-                result.success(rfidHandler.isConnected)
-            }
-
-            "startInventory" -> {
-                rfidHandler.startInventory { message ->
-                    result.success(message)
+                "getAllAvailableReaders" -> {
+                    rfidHandler?.getAllAvailableReaders(object : RFIDHandler.ResultCallback {
+                        override fun onSuccess(data: Any?) {
+                            result.success(data)
+                        }
+                        override fun onError(errorCode: String, errorMessage: String, errorDetails: Any?) {
+                            result.error(errorCode, errorMessage, errorDetails)
+                        }
+                    })
                 }
-            }
 
-            "stopInventory" -> {
-                rfidHandler.stopInventory { message ->
-                    result.success(message)
+                "isReaderConnected" -> {
+                    rfidHandler?.isReaderConnected(object : RFIDHandler.ResultCallback {
+                        override fun onSuccess(data: Any?) {
+                            result.success(data)
+                        }
+                        override fun onError(errorCode: String, errorMessage: String, errorDetails: Any?) {
+                            result.error(errorCode, errorMessage, errorDetails)
+                        }
+                    })
                 }
-            }
 
-            "setAntennaPower" -> {
-                val powerLevel = call.argument<Int>("powerLevel")
-                if (powerLevel != null) {
-                    rfidHandler.setAntennaPower(powerLevel) { message ->
-                        result.success(message)
+                "connectReader" -> {
+                    val readerName = call.argument<String>("readerName")
+                    rfidHandler?.connectReader(readerName, object : RFIDHandler.ResultCallback {
+                        override fun onSuccess(data: Any?) {
+                            result.success(data)
+                        }
+                        override fun onError(errorCode: String, errorMessage: String, errorDetails: Any?) {
+                            result.error(errorCode, errorMessage, errorDetails)
+                        }
+                    })
+                }
+
+                "disconnectReader" -> {
+                    rfidHandler?.disconnectReader(object : RFIDHandler.ResultCallback {
+                        override fun onSuccess(data: Any?) {
+                            result.success(data)
+                        }
+                        override fun onError(errorCode: String, errorMessage: String, errorDetails: Any?) {
+                            result.error(errorCode, errorMessage, errorDetails)
+                        }
+                    })
+                }
+
+                "startInventory" -> {
+                    rfidHandler?.startInventory(object : RFIDHandler.ResultCallback {
+                        override fun onSuccess(data: Any?) {
+                            result.success(data)
+                        }
+                        override fun onError(errorCode: String, errorMessage: String, errorDetails: Any?) {
+                            result.error(errorCode, errorMessage, errorDetails)
+                        }
+                    })
+                }
+
+                "stopInventory" -> {
+                    rfidHandler?.stopInventory(object : RFIDHandler.ResultCallback {
+                        override fun onSuccess(data: Any?) {
+                            result.success(data)
+                        }
+                        override fun onError(errorCode: String, errorMessage: String, errorDetails: Any?) {
+                            result.error(errorCode, errorMessage, errorDetails)
+                        }
+                    })
+                }
+
+                "setAntennaPower" -> {
+                    val powerLevel = call.argument<Int>("powerLevel")
+                    if (powerLevel == null) {
+                        result.error("INVALID_ARGUMENT", "powerLevel is required", null)
+                        return
                     }
-                } else {
-                    result.error("INVALID_ARGUMENT", "Power level is required", null)
+                    rfidHandler?.setAntennaPower(powerLevel, object : RFIDHandler.ResultCallback {
+                        override fun onSuccess(data: Any?) {
+                            result.success(data)
+                        }
+                        override fun onError(errorCode: String, errorMessage: String, errorDetails: Any?) {
+                            result.error(errorCode, errorMessage, errorDetails)
+                        }
+                    })
+                }
+
+                "getAntennaPower" -> {
+                    rfidHandler?.getAntennaPower(object : RFIDHandler.ResultCallback {
+                        override fun onSuccess(data: Any?) {
+                            result.success(data)
+                        }
+                        override fun onError(errorCode: String, errorMessage: String, errorDetails: Any?) {
+                            result.error(errorCode, errorMessage, errorDetails)
+                        }
+                    })
+                }
+
+                "getPlatformVersion" -> {
+                    val version = "Android ${android.os.Build.VERSION.RELEASE}"
+                    result.success(mapOf("version" to version))
+                }
+
+                else -> {
+                    result.notImplemented()
                 }
             }
-
-            "getPlatformVersion" -> {
-                result.success("Android ${android.os.Build.VERSION.RELEASE}")
-            }
-
-            else -> {
-                result.notImplemented()
-            }
+        } catch (e: Exception) {
+            result.error("METHOD_CALL_ERROR", "Error executing ${call.method}: ${e.message}", null)
         }
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-        methodChannel.setMethodCallHandler(null)
-        eventChannel.setStreamHandler(null)
-        rfidHandler.dispose()
+        try {
+            methodChannel.setMethodCallHandler(null)
+            eventChannel.setStreamHandler(null)
+            rfidHandler?.dispose()
+            rfidHandler = null
+            eventStreamHandler = null
+        } catch (e: Exception) {
+            // Silent
+        }
     }
 
-    // EventChannel.StreamHandler implementation
-    override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-        rfidHandler.setEventSink(events)
-    }
+    class EventStreamHandler : EventChannel.StreamHandler {
+        private var eventSink: EventChannel.EventSink? = null
 
-    override fun onCancel(arguments: Any?) {
-        rfidHandler.setEventSink(null)
+        override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+            eventSink = events
+        }
+
+        override fun onCancel(arguments: Any?) {
+            eventSink = null
+        }
+
+        fun sendEvent(event: Map<String, Any?>) {
+            eventSink?.success(event)
+        }
+
+        fun sendError(errorCode: String, errorMessage: String, errorDetails: Any?) {
+            eventSink?.error(errorCode, errorMessage, errorDetails)
+        }
     }
 }
-
-//package dev.jimmy.zebra_rfid_reader
-//
-//import io.flutter.embedding.engine.plugins.FlutterPlugin
-//import io.flutter.plugin.common.MethodCall
-//import io.flutter.plugin.common.MethodChannel
-//import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-//import io.flutter.plugin.common.MethodChannel.Result
-//import androidx.annotation.NonNull
-//
-//class ZebraRfidReaderPlugin : FlutterPlugin, MethodCallHandler {
-//     private lateinit var channel: MethodChannel
-//
-//    private lateinit var rfidManager: RFIDHandler
-//
-//    companion object {
-//        private const val TAG = "ZebraRfidReader"
-//        private const val CHANNEL_NAME = "zebra_rfid_reader"
-//    }
-//
-//    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-//        channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL_NAME)
-//        channel.setMethodCallHandler(this)
-//
-//        rfidHandler = RFIDHandler()
-//        rfidHandler.onCreate(this)
-//    }
-//
-//
-//    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-//        when (call.method) {
-//            "checkReaderConnection" -> {
-//               result.success("method - checkReaderConnection")
-//            }
-//
-//            "startScanning" -> {
-//                result.success("method - startScanning")
-//            }
-//
-//            "stopScanning" -> {
-//                result.success("method - stopScanning")
-//            }
-//
-//            "disconnect" -> {
-//                result.success("method - disconnect")
-//            }
-//
-//            "isConnected" -> {
-//                result.success("method - isConnected")
-//            }
-//
-////            "startInventory" -> {
-////                rfidManager?.startInventory(result)
-////            }
-////
-////            "stopInventory" -> {
-////                rfidManager?.stopInventory(result)
-////            }
-////
-////            "writeTag" -> {
-////                val tagId = call.argument<String>("tagId")
-////                val data = call.argument<String>("data")
-////                val memoryBank = call.argument<String>("memoryBank") ?: "EPC"
-////                val offset = call.argument<Int>("offset") ?: 0
-////
-////                if (tagId != null && data != null) {
-////                    rfidManager?.writeTag(tagId, data, memoryBank, offset, result)
-////                } else {
-////                    result.error("INVALID_ARGUMENT", "TagId and data are required", null)
-////                }
-////            }
-////
-////            "startLocationing" -> {
-////                val tagId = call.argument<String>("tagId")
-////                if (tagId != null) {
-////                    rfidManager?.startLocationing(tagId, result)
-////                } else {
-////                    result.error("INVALID_ARGUMENT", "TagId is required", null)
-////                }
-////            }
-////
-////            "stopLocationing" -> {
-////                rfidManager?.stopLocationing(result)
-////            }
-////
-////            "configureReader" -> {
-////                val config = call.arguments as? Map<String, Any>
-////                if (config != null) {
-////                    rfidManager?.configureReader(config, result)
-////                } else {
-////                    result.error("INVALID_ARGUMENT", "Configuration is required", null)
-////                }
-////            }
-////
-////            "getReaderConfig" -> {
-////                rfidManager?.getReaderConfig(result)
-////            }
-////
-////            "setAntennaPower" -> {
-////                val powerLevel = call.argument<Int>("powerLevel")
-////                if (powerLevel != null) {
-////                    rfidManager?.setAntennaPower(powerLevel, result)
-////                } else {
-////                    result.error("INVALID_ARGUMENT", "Power level is required", null)
-////                }
-////            }
-////
-////            "setBeeper" -> {
-////                val enabled = call.argument<Boolean>("enabled") ?: false
-////                rfidManager?.setBeeper(enabled, result)
-////            }
-////
-////            "getBatteryLevel" -> {
-////                rfidManager?.getBatteryLevel(result)
-////            }
-////
-////            "dispose" -> {
-////                rfidManager?.dispose(result)
-////            }
-////
-////            else -> {
-////                result.notImplemented()
-////            }
-//        }
-//    }
-//
-//    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-//        channel.setMethodCallHandler(null)
-//        rfidManager = null
-//    }
-//
-//}

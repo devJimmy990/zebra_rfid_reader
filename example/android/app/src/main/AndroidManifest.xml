@@ -22,13 +22,10 @@
     <!-- ===== USB PERMISSION (Optional) ===== -->
     <uses-permission android:name="android.permission.USB_PERMISSION" />
 
-    <!-- ===== FEATURE DECLARATIONS ===== -->
-    <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
-    <uses-feature android:name="android.hardware.usb.host" android:required="false" />
+
 
     <application
-        android:label="zebra_rfid_reader_example"
+        android:label="zebra_rfid_reader"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         tools:replace="android:label">

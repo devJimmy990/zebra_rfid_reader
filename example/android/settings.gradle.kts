@@ -14,17 +14,6 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        // ❌ DO NOT put your plugin repo here
-    }
-}
-
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
-    repositories {
-        google()
-        mavenCentral()
-        // ✔ Plugin’s local Maven repo — correct place
-        maven { url = uri("file:///D:/Developer/Mobile/zebra_rfid_reader/android/maven") }
     }
 }
 

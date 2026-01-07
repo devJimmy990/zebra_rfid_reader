@@ -15,8 +15,6 @@
     <!-- For USB connection (if needed) -->
     <uses-permission android:name="android.permission.USB_PERMISSION" />
     
-    <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
-    <uses-feature android:name="android.hardware.usb.host" android:required="false" />
     
     <!-- Empty application tag to prevent conflicts -->
     <application tools:node="merge" />

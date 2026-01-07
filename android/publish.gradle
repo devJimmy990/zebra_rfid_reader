@@ -16,3 +16,20 @@ publishing {
         }
     }
 }
+
+// Add task to verify publication
+task verifyPublication {
+    doLast {
+        def mavenDir = file("$projectDir/maven")
+        println "Maven directory: ${mavenDir.absolutePath}"
+        println "Maven directory exists: ${mavenDir.exists()}"
+        if (mavenDir.exists()) {
+            println "Contents:"
+            mavenDir.eachFileRecurse { file ->
+                if (file.isFile()) {
+                    println "  ${file.absolutePath}"
+                }
+            }
+        }
+    }
+}
