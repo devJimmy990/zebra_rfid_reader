@@ -8,11 +8,11 @@
         tools:targetApi="s" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
-    
+
     <!-- Android 11 and below -->
-    <uses-permission android:name="android.permission.BLUETOOTH" 
+    <uses-permission android:name="android.permission.BLUETOOTH"
         android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" 
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
         android:maxSdkVersion="30" />
 
     <!-- ===== LOCATION PERMISSIONS (Required for Bluetooth) ===== -->
@@ -25,7 +25,7 @@
 
 
     <application
-        android:label="zebra_rfid_reader"
+        android:label="rfid_zebra_reader"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         tools:replace="android:label">

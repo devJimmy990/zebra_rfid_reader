@@ -1,4 +1,4 @@
-package dev.jimmy.zebra_rfid_reader
+package dev.jimmy.rfid_zebra_reader
 
 import android.content.Context
 import androidx.annotation.NonNull
@@ -9,11 +9,11 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-class ZebraRfidReaderPlugin : FlutterPlugin, MethodCallHandler {
+class RfidZebraReaderPlugin : FlutterPlugin, MethodCallHandler {
 
     companion object {
-        private const val CHANNEL_NAME = "zebra_rfid_reader"
-        private const val EVENT_CHANNEL = "zebra_rfid_reader/events"
+        private const val CHANNEL_NAME = "rfid_zebra_reader"
+        private const val EVENT_CHANNEL = "rfid_zebra_reader/events"
     }
 
     private lateinit var context: Context

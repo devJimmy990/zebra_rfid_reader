@@ -1,4 +1,4 @@
-import 'package:zebra_rfid_reader/src/models/rfid_tag.dart';
+import 'package:rfid_zebra_reader/rfid_zebra_reader.dart';
 
 /// RFID Event types
 enum RfidEventType {

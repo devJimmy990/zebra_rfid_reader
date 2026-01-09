@@ -1,6 +1,6 @@
-# zebra_rfid_reader_example
+# rfid_zebra_reader_example
 
-Demonstrates how to use the zebra_rfid_reader plugin.
+Demonstrates how to use the rfid_zebra_reader plugin.
 
 ## Getting Started
 

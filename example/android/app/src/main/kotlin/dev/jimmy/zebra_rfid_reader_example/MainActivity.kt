@@ -1,4 +1,4 @@
-package dev.jimmy.zebra_rfid_reader_example
+package dev.jimmy.rfid_zebra_reader_example
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,4 +1,4 @@
-rootProject.name = "zebra_rfid_reader"
+rootProject.name = "rfid_zebra_reader"
 
 pluginManagement {
     repositories {

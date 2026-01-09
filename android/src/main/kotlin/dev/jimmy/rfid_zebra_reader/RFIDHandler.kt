@@ -1,4 +1,4 @@
-package dev.jimmy.zebra_rfid_reader
+package dev.jimmy.rfid_zebra_reader
 
 import android.content.Context
 import android.content.ContextWrapper
@@ -13,8 +13,8 @@ import java.util.ArrayList
 
 class RFIDHandler(
     private val context: Context,
-    private val tagReadEventSink: ZebraRfidReaderPlugin.EventStreamHandler,
-    private val statusEventSink: ZebraRfidReaderPlugin.EventStreamHandler
+    private val tagReadEventSink: RfidZebraReaderPlugin.EventStreamHandler,
+    private val statusEventSink: RfidZebraReaderPlugin.EventStreamHandler
 ) : Readers.RFIDReaderEventHandler {
 
     private var readers: Readers? = null

@@ -1,4 +1,4 @@
-package dev.jimmy.zebra_rfid_reader
+package dev.jimmy.rfid_zebra_reader
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -13,10 +13,10 @@ import kotlin.test.Test
  * you can run them directly from IDEs that support JUnit such as Android Studio.
  */
 
-internal class ZebraRfidReaderPluginTest {
+internal class RfidZebraReaderPluginTest {
     @Test
     fun onMethodCall_getPlatformVersion_returnsExpectedValue() {
-        val plugin = ZebraRfidReaderPlugin()
+        val plugin = RfidZebraReaderPlugin()
 
         val call = MethodCall("getPlatformVersion", null)
         val mockResult: MethodChannel.Result = Mockito.mock(MethodChannel.Result::class.java)

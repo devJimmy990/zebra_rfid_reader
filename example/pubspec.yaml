@@ -1,5 +1,5 @@
-name: zebra_rfid_reader_example
-description: "Demonstrates how to use the zebra_rfid_reader plugin."
+name: rfid_zebra_reader_example
+description: "Demonstrates how to use the rfid_zebra_reader plugin."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -19,7 +19,7 @@ dependencies:
   
   cupertino_icons: ^1.0.8
   permission_handler: ^12.0.1
-  zebra_rfid_reader:
+  rfid_zebra_reader:
     path: ../
 
 dev_dependencies:

@@ -15,7 +15,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "dev.jimmy.zebra_rfid_reader_example"
+    namespace = "dev.jimmy.rfid_zebra_reader_example"
 
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
@@ -30,7 +30,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "dev.jimmy.zebra_rfid_reader_example"
+        applicationId = "dev.jimmy.rfid_zebra_reader_example"
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

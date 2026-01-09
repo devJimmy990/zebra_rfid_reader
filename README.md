@@ -1,4 +1,4 @@
-# zebra_rfid_reader
+# rfid_zebra_reader
 
 A new Flutter project.
 

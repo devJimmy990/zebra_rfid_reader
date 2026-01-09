@@ -1,7 +1,7 @@
-name: zebra_rfid_reader
+name: rfid_zebra_reader
 version: 0.0.1
 description: "plugin to interact with Zebra RFID readers"
-homepage: https://github.com/devJimmy990/zebra_rfid_reader
+homepage: https://github.com/devJimmy990/rfid_zebra_reader
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -23,5 +23,5 @@ flutter:
   plugin:
     platforms:
       android:
-        package: dev.jimmy.zebra_rfid_reader
-        pluginClass: ZebraRfidReaderPlugin
+        package: dev.jimmy.rfid_zebra_reader
+        pluginClass: RfidZebraReaderPlugin

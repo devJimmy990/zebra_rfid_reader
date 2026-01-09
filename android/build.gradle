@@ -25,7 +25,7 @@ apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
 android {
-    namespace = "dev.jimmy.zebra_rfid_reader"
+    namespace = "dev.jimmy.rfid_zebra_reader"
     compileSdk = 36
 
     defaultConfig {

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="dev.jimmy.zebra_rfid_reader">
+    package="dev.jimmy.rfid_zebra_reader">
     
     <!-- Bluetooth permissions for RFID reader connection -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
