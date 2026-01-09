@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'app_logger.dart';
+import 'package:rfid_zebra_reader/rfid_zebra_reader.dart';
 
 class LogViewerScreen extends StatefulWidget {
   const LogViewerScreen({super.key});
@@ -228,8 +227,7 @@ class _LogViewerScreenState extends State<LogViewerScreen> {
 
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 4),
-                  color:
-                      log.level == LogLevel.error ||
+                  color: log.level == LogLevel.error ||
                           log.level == LogLevel.critical
                       ? color.withValues(alpha: .1)
                       : null,
@@ -239,8 +237,7 @@ class _LogViewerScreenState extends State<LogViewerScreen> {
                       log.message,
                       style: TextStyle(
                         fontSize: 13,
-                        fontWeight:
-                            log.level == LogLevel.error ||
+                        fontWeight: log.level == LogLevel.error ||
                                 log.level == LogLevel.critical
                             ? FontWeight.bold
                             : FontWeight.normal,

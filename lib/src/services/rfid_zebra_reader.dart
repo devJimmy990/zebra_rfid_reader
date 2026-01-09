@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:zebra_rfid_reader/src/app_logger.dart';
-import 'package:zebra_rfid_reader/src/models/rfid_event.dart';
+import 'package:rfid_zebra_reader/src/models/rfid_event.dart';
+import 'package:rfid_zebra_reader/src/services/app_logger.dart';
 
 class ZebraRfidReader {
-  static const _methodChannel = MethodChannel('zebra_rfid_reader');
-  static const _eventChannel = EventChannel('zebra_rfid_reader/events');
+  static const _methodChannel = MethodChannel('rfid_zebra_reader');
+  static const _eventChannel = EventChannel('rfid_zebra_reader/events');
   static final _logger = AppLogger();
 
   static Stream<RfidEvent>? _eventStream;
@@ -16,35 +16,33 @@ class ZebraRfidReader {
     try {
       _logger.debug('Initializing event stream', source: 'ZebraRfidReader');
 
-      _eventStream ??= _eventChannel
-          .receiveBroadcastStream()
-          .map((dynamic eventRaw) {
-            final Map<String, dynamic> event = Map<String, dynamic>.from(
-              eventRaw,
-            );
+      _eventStream ??=
+          _eventChannel.receiveBroadcastStream().map((dynamic eventRaw) {
+        final Map<String, dynamic> event = Map<String, dynamic>.from(
+          eventRaw,
+        );
 
-            _logger.debug(
-              'Event received: ${event['type']}',
-              source: 'EventStream',
-            );
+        _logger.debug(
+          'Event received: ${event['type']}',
+          source: 'EventStream',
+        );
 
-            if (event['status'] != null) {
-              _logger.debug(
-                'Native status:\n${event['status']}',
-                source: 'EventStream',
-              );
-            }
+        if (event['status'] != null) {
+          _logger.debug(
+            'Native status:\n${event['status']}',
+            source: 'EventStream',
+          );
+        }
 
-            return RfidEvent.fromMap(event);
-          })
-          .handleError((error) {
-            _logger.error(
-              'Event stream error',
-              source: 'EventStream',
-              error: error,
-            );
-            throw error;
-          });
+        return RfidEvent.fromMap(event);
+      }).handleError((error) {
+        _logger.error(
+          'Event stream error',
+          source: 'EventStream',
+          error: error,
+        );
+        throw error;
+      });
 
       return _eventStream!;
     } catch (e, stack) {
@@ -135,9 +133,8 @@ class ZebraRfidReader {
         return [];
       }
 
-      final readers = readersList
-          .map((e) => Map<String, String>.from(e as Map))
-          .toList();
+      final readers =
+          readersList.map((e) => Map<String, String>.from(e as Map)).toList();
 
       _logger.info(
         'Found ${readers.length} readers',
