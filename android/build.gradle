@@ -1,4 +1,5 @@
-version = "1.0-SNAPSHOT"
+group = "dev.jimmy.rfid_zebra_reader"
+version = "0.0.2"
 
 buildscript {
     ext.kotlin_version = "2.1.0"
@@ -12,12 +13,13 @@ buildscript {
     }
 }
 
-// Add repositories at root level for all projects
 allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("$rootDir/maven") }
+        maven {
+            url "${project.projectDir}/maven"
+        }
     }
 }
 
@@ -27,31 +29,30 @@ apply plugin: "kotlin-android"
 android {
     namespace = "dev.jimmy.rfid_zebra_reader"
     compileSdk = 36
-
-    defaultConfig {
-        minSdk = 24
-    }
-
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
-
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
+        jvmTarget = '11'
     }
-
     sourceSets {
         main.java.srcDirs += "src/main/kotlin"
         test.java.srcDirs += "src/test/kotlin"
+    }
+    defaultConfig {
+        minSdk = 23
+        targetSdk = 34
+    }
+}
+
+repositories {
+    maven {
+        url "${projectDir}/maven"
     }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.appcompat:appcompat:1.6.1"
-    implementation "androidx.core:core-ktx:1.12.0"
-
-    // Reference the published maven artifact
     implementation "com.zebra.rfid:rfid-api3:2.0.5.238"
 }
