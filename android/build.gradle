@@ -18,7 +18,7 @@ allprojects {
         google()
         mavenCentral()
         maven {
-            url "${project.projectDir}/maven"
+            url = "https://raw.githubusercontent.com/devJimmy990/rfid_zebra_reader/main/android/maven"
         }
     }
 }
@@ -48,7 +48,7 @@ android {
 
 repositories {
     maven {
-        url "${projectDir}/maven"
+        url = "https://raw.githubusercontent.com/devJimmy990/rfid_zebra_reader/main/android/maven"
     }
 }
 

@@ -3,7 +3,10 @@ allprojects {
         google()
         mavenCentral()
         // Add plugin's local Maven repo here instead
-        maven { url = uri("file:///D:/Developer/Mobile/rfid_zebra_reader/android/maven") }
+        maven {
+            url = uri("https://raw.githubusercontent.com/devJimmy990/rfid_zebra_reader/main/android/maven")
+        }
+
     }
 }
 
