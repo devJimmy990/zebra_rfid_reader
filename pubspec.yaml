@@ -1,5 +1,5 @@
 name: rfid_zebra_reader
-version: 0.0.1
+version: 0.0.2
 description: "plugin to interact with Zebra RFID readers"
 homepage: https://github.com/devJimmy990/rfid_zebra_reader
 
